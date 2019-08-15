@@ -1,0 +1,37 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  port: 8080
+mybatis:
+  mapper-locations: classpath*:mappers/*Mapper.xml
+  configuration.map-underscore-to-camel -case: true
+logging:
+#  level.com.mmall.dao: debug
+  config: classpath:log/logback.xml
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  profiles:
+    active: @activatedProperties@
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
