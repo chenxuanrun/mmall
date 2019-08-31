@@ -1,5 +1,6 @@
 package com.mmall.service.impl;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.mmall.common.Const;
 import com.mmall.common.ResponseCode;
@@ -14,6 +15,7 @@ import com.mmall.util.PropertiesUtil;
 import com.mmall.vo.CartProductVo;
 import com.mmall.vo.CartVo;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,12 +52,16 @@ public class CartServiceImpl implements ICartService {
             //这个产品已经在购物车里了
             //如果产品已存在,数量相加
             count = cart.getQuantity() + count;
-            cart.setProductId(count);
+            cart.setQuantity(count);
             cartMapper.updateByPrimaryKeySelective(cart);
         }
+        return this.list(userId);
+    }
+    @Override
+    public ServerResponse<CartVo> list(Integer userId){
         CartVo cartVo=this.getCartVoLimit(userId);
         return ServerResponse.createBySuccess(cartVo);
-    }
+    } 
     
     private CartVo getCartVoLimit(Integer userId){
         CartVo cartVo=new CartVo();
@@ -74,6 +80,7 @@ public class CartServiceImpl implements ICartService {
                       cartProductVo.setProductMainImage(product.getMainImage());
                       cartProductVo.setProductName(product.getName());
                       cartProductVo.setProductSubtitle(product.getSubtitle());
+                      cartProductVo.setProductStatus(product.getStatus());
                       cartProductVo.setProductPrice(product.getPrice());
                       cartProductVo.setProductStock(product.getStock());
                       //判断库存
@@ -108,11 +115,46 @@ public class CartServiceImpl implements ICartService {
         cartVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
         return cartVo;
     }
-    
+    @Override
+    public ServerResponse<CartVo> update(Integer userId,Integer productId,Integer count){
+        if (productId==null||count==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }   
+        Cart cart =cartMapper.selectCartByUserIdProductId(userId,productId);
+        if (cart!=null){
+             cart.setQuantity(count);
+        }   
+        cartMapper.updateByPrimaryKeySelective(cart);
+        return this.list(userId);
+    } 
+    @Override
+    public ServerResponse<CartVo> deleteProduct(Integer userId,String productIds){
+        if (StringUtils.isBlank(productIds)){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+       List<String> productList= Splitter.on(",").splitToList(productIds);
+       if (CollectionUtils.isEmpty(productList)){
+           return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+       }
+       cartMapper.deleteByUserIdProductIds(userId,productList);
+        return this.list(userId);
+    }
     private boolean getAllCheckedStatus(Integer userId){
          if (userId==null){
              return false;
          }
          return cartMapper.selectCartProductCheckedStatusByUserId(userId) == 0; 
+    }
+    @Override
+    public ServerResponse<CartVo> selectOrUnSelect(Integer userId,Integer checked,Integer productId){
+        cartMapper.checkedOrUncheckedProduct(userId,checked,productId);
+        return this.list(userId);
+    }
+    @Override
+    public ServerResponse<Integer> getProductCount(Integer userId){
+        if (userId==null){
+            return ServerResponse.createBySuccess(0);
+        }
+        return ServerResponse.createBySuccess(cartMapper.selectCartProductCount(userId));
     }
 }
