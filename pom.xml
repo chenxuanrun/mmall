@@ -164,7 +164,27 @@
             <artifactId>core</artifactId>
             <version>3.4.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+         <!--本地jar包-->
+        <dependency>
+            <groupId>alipay-sdk-java</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>3.4.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/alipay-sdk-java-3.3.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>alipay-trade-sdk</groupId>
+            <artifactId>alipay-trade-sdk</artifactId>
+            <version>20161215</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/alipay-trade-sdk-20161215.jar</systemPath>
+        </dependency>
+      
     </dependencies>
     <profiles>
         <profile>
@@ -186,6 +206,7 @@
         </profile>
     </profiles>
     <build>
+        <!--打包之后文件名-->
         <finalName>mmall</finalName>
         <plugins>
             <plugin>
@@ -222,6 +243,23 @@
                     <compilerArguments>
                         <extdirs>${project.basedir}/src/main/resources/lib</extdirs>
                     </compilerArguments>
+                </configuration>
+            </plugin>
+            <!--引入本地jar包作为依赖必须-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${project.basedir}/src/main/resources/lib</directory>
+                            <targetPath>WEB-INF/lib</targetPath>
+                            <includes>
+                                <include>**/*.jar</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
         </plugins>
