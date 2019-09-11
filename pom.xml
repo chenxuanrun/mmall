@@ -186,6 +186,7 @@
         </profile>
     </profiles>
     <build>
+        <finalName>mmall</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
