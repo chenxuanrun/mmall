@@ -7,23 +7,20 @@ mybatis:
   configuration.map-underscore-to-camel -case: true
 logging:
 #  level.com.mmall.dao: debug
-  config: classpath:log/logback.xml
+  config: ${log.path}
 spring:
   http:
     encoding:
       charset: UTF-8
       enabled: true
       force: true
-  profiles:
-    active: @activatedProperties@
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    initialSize: 5
-    minIdle: 5
-    maxActive: 20
-    maxWait: 60000
+    url: jdbc:mysql://106.14.135.234:3306/mmall?useUnicode=true&autoReconnect=true&rewriteBatchedStatements=true&zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
     timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
     validationQuery: SELECT 1 FROM DUAL
     testWhileIdle: true
     testOnBorrow: false

@@ -92,12 +92,6 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.58</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.10</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -164,11 +158,6 @@
             <artifactId>core</artifactId>
             <version>3.4.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>core</artifactId>
-            <version>3.3.0</version>
-        </dependency>
          <!--本地jar包-->
         <dependency>
             <groupId>alipay-sdk-java</groupId>
@@ -186,6 +175,7 @@
         </dependency>
       
     </dependencies>
+    
     <profiles>
         <profile>
             <!-- 开发 -->
@@ -194,17 +184,25 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <activatedProperties>dev</activatedProperties>
+                <deploy.type>dev</deploy.type>
             </properties>
         </profile>
         <profile>
-            <!-- 生产 -->
+            <!-- 测试 -->
+            <id>beta</id>
+            <properties>
+                <deploy.type>beta</deploy.type>
+            </properties>
+        </profile>
+        <profile>
+            <!-- 线上 -->
             <id>prod</id>
             <properties>
-                <activatedProperties>prod</activatedProperties>
+                <deploy.type>prod</deploy.type>
             </properties>
         </profile>
     </profiles>
+    
     <build>
         <!--打包之后文件名-->
         <finalName>mmall</finalName>
@@ -263,6 +261,17 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources.${deploy.type}</directory>
+                <excludes>
+                    <exclude>*.jsp</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
 
 </project>
