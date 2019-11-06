@@ -261,6 +261,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <!--环境隔离配置,配置读取的resource的路径-->
         <resources>
             <resource>
                 <directory>src/main/resources.${deploy.type}</directory>
