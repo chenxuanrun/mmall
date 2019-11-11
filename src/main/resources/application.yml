@@ -6,7 +6,7 @@ mybatis:
   mapper-locations: classpath*:mappers/*Mapper.xml
   configuration.map-underscore-to-camel -case: true
 logging:
-#  level.com.mmall.dao: debug
+  level.com.mmall.dao: debug
   config: ${log.path}
 spring:
   http:
@@ -32,3 +32,13 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Shanghai
+
+  #thymelea模板配置
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+    enabled: true
+
