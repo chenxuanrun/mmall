@@ -6,8 +6,7 @@ mybatis:
   mapper-locations: classpath*:mappers/*Mapper.xml
   configuration.map-underscore-to-camel -case: true
 logging:
-  level.com.mmall.dao: debug
-  config: ${log.path}
+  config: classpath:log/logback.xml
 spring:
   http:
     encoding:
