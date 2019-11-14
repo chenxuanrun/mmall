@@ -32,13 +32,21 @@ public class CookieUtil {
         return null;
     }
     
+    //X:domin=".happymmall.com"
+    //a:A.happymmall.com           cookie:domin=A.happymmall.com;path="/"
+    //b:B.happymmall.com           cookie:domin=B.happymmall.com;path="/"
+    //c:A.happymmall.com/test/cc   cookie:domin=A.happymmall.com;path="/test/cc"
+    //d:A.happymmall.com/test/dd   cookie:domin=A.happymmall.com;path="/test/dd"
+    //e:A.happymmall.com/test      cookie:domin=A.happymmall.com;path="/test"
+    
     public static void writeLoginToken(HttpServletResponse response,String token){
         Cookie ck = new Cookie(COOKIE_NAME, token);
         ck.setDomain(COOKIE_DOMAIN);
         ck.setPath("/"); //'/'代表设置在根目录
+        ck.setHttpOnly(true);
         //单位是秒
         //如果这个maxage不设置,cookie就不会写入硬盘,而是写在内从.只在当前页面有效.
-        ck.setMaxAge(60*60*24*365);//如果是-1,代表永久
+        ck.setMaxAge(60*60*24*365);//会话级cookie，关闭浏览器失效
         log.info("write cookieName:{}.cookieValue:{} ",ck.getName(),ck.getValue());
         response.addCookie(ck);
     }
