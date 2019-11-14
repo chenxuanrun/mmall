@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
  * @author: cxr
  * @create: 2019-11-14 09:50
  **/
-@Slf4j
+@Slf4j                                                  
 public class CookieUtil {
-    private final static String COOKIE_DOMAIN = ".ashshoppingmall.com";
-    private final static String COOKIE_NAME = "ashshoppingmall_login_token";
+    private final static String COOKIE_DOMAIN = ".localshoppingmall.com";
+    private final static String COOKIE_NAME = "localshoppingmall_login_token";
     
     public static String readLoginToken(HttpServletRequest request){
         Cookie[] cks = request.getCookies();
