@@ -59,6 +59,7 @@ public class CookieUtil {
                      ck.setDomain(COOKIE_DOMAIN);
                      ck.setPath("/");
                      ck.setMaxAge(0);//设置成0,代表删除此cookie
+                     ck.setHttpOnly(true);
                      log.info("del cookieName:{}.cookieValue:{} ",ck.getName(),ck.getValue());
                      response.addCookie(ck);
                      return;
