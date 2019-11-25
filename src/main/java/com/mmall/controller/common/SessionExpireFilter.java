@@ -41,8 +41,8 @@ public class SessionExpireFilter implements Filter {
                 //如果user不为空,则重置session的时间,即调用expire命令
                 RedisPoolUtil.expire(loginToken, Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
             }
-            chain.doFilter(request,response);
         }
+        chain.doFilter(request, response);
     }
 
     @Override
