@@ -7,7 +7,7 @@ import java.util.Set;
 //enum适用于多属性常量而这里的final static适用于单属性常量
 public class Const {
     public final static String CURRENT_USER="currentUser";
-    
+    public static final String TOKEN_PREFIX="token_";
     public final static String EMAIL="email";
     public final static String USERNAME="username";
     

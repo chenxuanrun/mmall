@@ -59,7 +59,7 @@ public class UserController {
     }
     @RequestMapping(value = "get_user_info.do",method = RequestMethod.POST)
     public ServerResponse<User> getUserInfo(HttpServletRequest request){
-//       User user= (User) session.getAttribute(Const.CURRENT_USER); 
+    //       User user= (User) session.getAttribute(Const.CURRENT_USER); 
         String loginToken=CookieUtil.readLoginToken(request);
         if (StringUtils.isEmpty(loginToken)){
             return ServerResponse.createByErrorMessage("用户未登录,无法获取用户信息"); 
@@ -84,8 +84,13 @@ public class UserController {
        return iUserService.forgetRestPassword(username,passwordNew,forgetToken); 
     }
     @RequestMapping(value = "reset_password.do",method = RequestMethod.POST)
-    public ServerResponse<String> resetPassword(HttpSession session,String passwordOld,String passwordNew){
-        User user= (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> resetPassword(HttpServletRequest request,String passwordOld,String passwordNew){
+        String loginToken=CookieUtil.readLoginToken(request);
+        if (StringUtils.isEmpty(loginToken)){
+            return ServerResponse.createByErrorMessage("用户未登录,无法获取用户信息");
+        }
+        String userJsonStr = RedisPoolUtil.get(loginToken);
+        User user = JsonUtil.string2Obj(userJsonStr, User.class);
         if (user==null){
             return ServerResponse.createByErrorMessage("用户未登录");
         }
